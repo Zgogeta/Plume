@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plume — Vos posts LinkedIn, rédigés en 30 secondes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0D1626;
+    --ink-soft:#18243B;
+    --white:#FBFCFE;
+    --panel:#F1F3F8;
+    --indigo:#2E4BD6;
+    --indigo-deep:#2138A8;
+    --gold:#E0A53C;
+    --muted:#5C6680;
+    --line:#E3E6EF;
+    --display:'Bricolage Grotesque',system-ui,sans-serif;
+    --body:'Inter',system-ui,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--body);
+    color:var(--ink);
+    background:var(--white);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1140px;margin:0 auto;padding:0 24px}
+  a{color:inherit;text-decoration:none}
+
+  /* NAV */
+  nav{position:sticky;top:0;z-index:50;background:rgba(251,252,254,.82);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:68px}
+  .logo{font-family:var(--display);font-weight:800;font-size:23px;letter-spacing:-.02em;display:flex;align-items:center;gap:9px}
+  .logo .nib{width:13px;height:13px;background:var(--gold);border-radius:2px 8px 2px 8px;transform:rotate(45deg)}
+  .nav-links{display:flex;align-items:center;gap:30px}
+  .nav-links a{font-size:15px;color:var(--muted);font-weight:500;transition:color .15s}
+  .nav-links a:hover{color:var(--ink)}
+  .btn{font-family:var(--body);font-weight:600;font-size:15px;border:none;cursor:pointer;border-radius:10px;padding:11px 20px;transition:transform .12s,box-shadow .15s,background .15s;display:inline-block}
+  .btn-primary{background:var(--indigo);color:#fff;box-shadow:0 6px 20px -8px rgba(46,75,214,.7)}
+  .btn-primary:hover{background:var(--indigo-deep);transform:translateY(-1px)}
+  .btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+  .btn-ghost:hover{border-color:var(--ink);background:var(--white)}
+  @media(max-width:760px){.nav-links a:not(.btn){display:none}}
+
+  /* HERO */
+  .hero{padding:84px 0 72px}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--indigo);background:#E9EDFD;padding:6px 13px;border-radius:100px;margin-bottom:22px}
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--indigo)}
+  h1{font-family:var(--display);font-weight:800;font-size:clamp(38px,5vw,58px);line-height:1.04;letter-spacing:-.03em;margin-bottom:20px}
+  h1 .stroke{position:relative;white-space:nowrap}
+  h1 .stroke::after{content:"";position:absolute;left:-2px;right:-2px;bottom:6px;height:14px;background:var(--gold);opacity:.32;z-index:-1;border-radius:3px}
+  .sub{font-size:19px;color:var(--muted);max-width:520px;margin-bottom:32px}
+  .hero-cta{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+  .hero-cta .btn-primary{padding:14px 26px;font-size:16px}
+  .trust{margin-top:20px;font-size:14px;color:var(--muted);display:flex;align-items:center;gap:8px}
+  .trust .check{color:var(--indigo);font-weight:700}
+
+  /* POST CARD (signature) */
+  .card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:0 30px 60px -30px rgba(13,22,38,.28);position:relative}
+  .card-head{display:flex;align-items:center;gap:13px;margin-bottom:16px}
+  .avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--indigo),#5B74E8);flex-shrink:0}
+  .who b{display:block;font-family:var(--display);font-weight:700;font-size:16px}
+  .who span{font-size:13px;color:var(--muted)}
+  .post-body{font-size:15.5px;color:#1c2435;min-height:148px;white-space:pre-wrap}
+  .cursor{display:inline-block;width:2px;height:18px;background:var(--indigo);vertical-align:-3px;animation:blink 1s steps(2) infinite}
+  @keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
+  .post-foot{display:flex;gap:22px;margin-top:18px;padding-top:15px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+  .post-foot span{display:flex;align-items:center;gap:6px}
+  .badge{position:absolute;top:-14px;right:18px;background:var(--ink);color:#fff;font-size:12px;font-weight:600;padding:6px 12px;border-radius:8px;display:flex;align-items:center;gap:6px}
+  .badge .nib{width:9px;height:9px;background:var(--gold);border-radius:2px 6px 2px 6px;transform:rotate(45deg)}
+  @media(max-width:860px){.hero-grid{grid-template-columns:1fr;gap:40px}.hero{padding:56px 0 56px}}
+
+  /* SECTIONS */
+  section.block{padding:78px 0}
+  .label{font-family:var(--body);font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--indigo);margin-bottom:14px}
+  h2{font-family:var(--display);font-weight:700;font-size:clamp(28px,3.4vw,40px);letter-spacing:-.025em;line-height:1.1;margin-bottom:16px}
+  .lead{font-size:18px;color:var(--muted);max-width:560px}
+
+  /* STEPS */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:48px}
+  .step{position:relative;padding-top:18px}
+  .step .num{font-family:var(--display);font-weight:800;font-size:15px;color:var(--indigo);border:1.5px solid var(--indigo);width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:18px}
+  .step h3{font-family:var(--display);font-weight:700;font-size:20px;margin-bottom:8px;letter-spacing:-.01em}
+  .step p{color:var(--muted);font-size:15.5px}
+  @media(max-width:760px){.steps{grid-template-columns:1fr;gap:22px}}
+
+  /* DARK FEATURES */
+  .dark{background:var(--ink);color:#fff}
+  .dark .label{color:var(--gold)}
+  .dark .lead{color:#9aa6bf}
+  .feat{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--ink-soft);border:1px solid var(--ink-soft);border-radius:16px;overflow:hidden;margin-top:44px}
+  .feat .item{background:var(--ink);padding:30px}
+  .feat .item h3{font-family:var(--display);font-weight:700;font-size:19px;margin-bottom:9px;display:flex;align-items:center;gap:10px}
+  .feat .item h3 .d{width:8px;height:8px;background:var(--gold);border-radius:2px 6px 2px 6px;transform:rotate(45deg)}
+  .feat .item p{color:#9aa6bf;font-size:15px}
+  @media(max-width:680px){.feat{grid-template-columns:1fr}}
+
+  /* PRICING */
+  .pricing{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;max-width:760px;margin:48px auto 0}
+  .price{border:1px solid var(--line);border-radius:18px;padding:32px;background:#fff;display:flex;flex-direction:column}
+  .price.featured{border:2px solid var(--indigo);box-shadow:0 24px 50px -28px rgba(46,75,214,.5);position:relative}
+  .price.featured .tag{position:absolute;top:-13px;left:32px;background:var(--indigo);color:#fff;font-size:12px;font-weight:600;padding:5px 12px;border-radius:7px}
+  .price .name{font-family:var(--display);font-weight:700;font-size:21px}
+  .price .amt{font-family:var(--display);font-weight:800;font-size:46px;letter-spacing:-.03em;margin:14px 0 4px}
+  .price .amt small{font-family:var(--body);font-weight:500;font-size:17px;color:var(--muted)}
+  .price ul{list-style:none;margin:22px 0 28px;display:flex;flex-direction:column;gap:12px}
+  .price li{font-size:15px;display:flex;gap:10px;align-items:flex-start}
+  .price li::before{content:"✓";color:var(--indigo);font-weight:800;flex-shrink:0}
+  .price .btn{width:100%;text-align:center;margin-top:auto;padding:13px}
+  @media(max-width:680px){.pricing{grid-template-columns:1fr}}
+
+  /* FAQ */
+  .faq{max-width:720px;margin:44px auto 0}
+  .qa{border-bottom:1px solid var(--line);padding:22px 0}
+  .qa h4{font-family:var(--display);font-weight:700;font-size:18px;margin-bottom:8px}
+  .qa p{color:var(--muted);font-size:15.5px}
+
+  /* CTA strip */
+  .cta-strip{background:var(--ink);color:#fff;border-radius:22px;padding:54px;text-align:center;margin:0 auto;max-width:1140px}
+  .cta-strip h2{color:#fff}
+  .cta-strip p{color:#9aa6bf;font-size:18px;margin-bottom:28px}
+
+  /* FOOTER */
+  footer{padding:46px 0;border-top:1px solid var(--line);margin-top:78px}
+  .foot-in{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px}
+  .foot-in .logo{font-size:19px}
+  .foot-links{display:flex;gap:24px;font-size:14px;color:var(--muted)}
+  .foot-links a:hover{color:var(--ink)}
+
+  .reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+  .reveal.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.cursor{animation:none}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-in">
+    <div class="logo"><span class="nib"></span>Plume</div>
+    <div class="nav-links">
+      <a href="#etapes">Comment ça marche</a>
+      <a href="#features">Fonctionnalités</a>
+      <a href="#waitlist" class="btn btn-primary">Rejoindre</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow"><span class="dot"></span>Rédaction LinkedIn par IA · en français</span>
+      <h1>Vos posts LinkedIn, <span class="stroke">rédigés en 30 secondes.</span></h1>
+      <p class="sub">Plume écrit des posts percutants dans votre ton, adaptés à votre audience. Vous donnez le sujet, l'IA rédige, vous publiez.</p>
+      <div class="hero-cta" style="flex-direction:column;align-items:flex-start;width:100%;max-width:380px">
+        <form id="waitlist-form" style="width:100%;display:flex;gap:10px">
+          <input type="email" placeholder="vous@email.com" required style="flex:1;padding:12px 16px;border:1.5px solid var(--line);border-radius:10px;font-family:var(--body);font-size:15px;outline:none;transition:border .15s" />
+          <button type="submit" class="btn btn-primary" style="white-space:nowrap">Rejoindre</button>
+        </form>
+      </div>
+      <div class="trust"><span class="check">✓</span> Disponible mi-juillet · zéro spam</div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="badge"><span class="nib"></span>Plume rédige</div>
+        <div class="card-head">
+          <div class="avatar"></div>
+          <div class="who"><b>Votre nom</b><span>Consultant · il y a 2 min</span></div>
+        </div>
+        <div class="post-body" id="post"></div>
+        <div class="post-foot">
+          <span>👍 142</span><span>💬 28</span><span>↗ 11</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="block" id="etapes">
+  <div class="wrap">
+    <p class="label">Comment ça marche</p>
+    <h2>Trois étapes. Zéro page blanche.</h2>
+    <p class="lead">De l'idée au post prêt à publier, sans y passer la soirée.</p>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="num">1</div>
+        <h3>Donnez le sujet</h3>
+        <p>Un thème, une idée en vrac, un lien d'article. Une phrase suffit.</p>
+      </div>
+      <div class="step reveal">
+        <div class="num">2</div>
+        <h3>Plume rédige</h3>
+        <p>Trois variations dans votre ton, structurées pour l'accroche et l'engagement.</p>
+      </div>
+      <div class="step reveal">
+        <div class="num">3</div>
+        <h3>Vous publiez</h3>
+        <p>Choisissez, ajustez en un clic, copiez. C'est en ligne.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block dark" id="features">
+  <div class="wrap">
+    <p class="label">Pensé pour LinkedIn</p>
+    <h2>Pas un robot. Votre voix, en mieux.</h2>
+    <p class="lead">Le problème des IA génériques : tout le monde sonne pareil. Plume apprend votre style.</p>
+    <div class="feat">
+      <div class="item"><h3><span class="d"></span>Votre ton, gardé</h3><p>Plume calque votre manière d'écrire. Vos posts restent les vôtres, pas du texte d'IA.</p></div>
+      <div class="item"><h3><span class="d"></span>100% français</h3><p>Pensé pour le marché francophone. Pas de tournures traduites de l'anglais.</p></div>
+      <div class="item"><h3><span class="d"></span>Accroches qui retiennent</h3><p>Première ligne travaillée pour stopper le scroll. C'est là que tout se joue.</p></div>
+      <div class="item"><h3><span class="d"></span>Calendrier éditorial</h3><p>Planifiez vos thèmes de la semaine. Plus jamais à court d'idées le lundi matin.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="waitlist">
+  <div class="wrap">
+    <div style="text-align:center">
+      <p class="label">Rejoignez l'avant-première</p>
+      <h2>Disponible mi-juillet</h2>
+      <p class="lead" style="margin:0 auto 32px">Les premiers waitlisters accès gratuit 3 mois + prix Early Bird à 7€/mois.</p>
+      <form id="waitlist-form-2" style="max-width:420px;margin:0 auto;display:flex;gap:10px">
+        <input type="email" placeholder="votre@email.com" required style="flex:1;padding:13px 16px;border:1.5px solid var(--line);border-radius:10px;font-family:var(--body);font-size:15px;outline:none;transition:border .15s" />
+        <button type="submit" class="btn btn-primary">Rejoindre</button>
+      </form>
+      <p style="font-size:14px;color:var(--muted);margin-top:14px">Pas de carte de crédit · notifications uniquement au lancement</p>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div style="text-align:center"><p class="label">Questions</p><h2>Ce qu'on nous demande</h2></div>
+    <div class="faq">
+      <div class="qa"><h4>C'est vraiment en français ?</h4><p>Oui, à 100%. Plume est conçu pour le français, pas traduit depuis l'anglais.</p></div>
+      <div class="qa"><h4>Mes posts vont tous se ressembler ?</h4><p>Non. Plume garde votre ton et chaque post part de votre sujet. Vous gardez la main.</p></div>
+      <div class="qa"><h4>Il y a un engagement ?</h4><p>Aucun. Vous résiliez en un clic, à tout moment, depuis votre compte.</p></div>
+      <div class="qa"><h4>Et mes données ?</h4><p>Vos sujets et posts vous appartiennent. Rien n'est partagé ni revendu.</p></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding:0 24px 78px">
+  <div class="cta-strip">
+    <h2>Arrêtez de fixer la page blanche.</h2>
+    <p>Votre prochain post est à 30 secondes d'ici — mi-juillet.</p>
+    <a href="#waitlist" class="btn btn-primary" style="padding:15px 30px;font-size:16px">Rejoindre l'avant-première</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-in">
+    <div class="logo"><span class="nib"></span>Plume</div>
+    <div class="foot-links">
+      <a href="#">Mentions légales</a>
+      <a href="#">Confidentialité</a>
+      <a href="#">Contact</a>
+    </div>
+    <div style="font-size:14px;color:var(--muted)">© 2026 Plume</div>
+  </div>
+</footer>
+
+<script>
+  const posts = [
+    "J'ai longtemps cru qu'il fallait poster tous les jours pour exister sur LinkedIn.\n\nFaux.\n\nCe qui compte, ce n'est pas la fréquence. C'est la première ligne.\n\nVoici les 3 accroches qui ont changé ma portée 👇",
+    "Personne ne lit vos posts.\n\nPas parce qu'ils sont mauvais.\n\nParce que la première phrase ne donne aucune raison de s'arrêter.\n\nRègle n°1 : écrivez l'accroche en dernier."
+  ];
+  const el = document.getElementById('post');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if(reduce){
+    el.textContent = posts[0];
+  } else {
+    let p = 0;
+    function type(){
+      const txt = posts[p];
+      let i = 0;
+      el.innerHTML = '';
+      const cur = document.createElement('span');
+      cur.className = 'cursor';
+      function step(){
+        el.textContent = txt.slice(0,i);
+        el.appendChild(cur);
+        if(i < txt.length){ i++; setTimeout(step, 22 + Math.random()*30); }
+        else { setTimeout(()=>{ p=(p+1)%posts.length; type(); }, 3200); }
+      }
+      step();
+    }
+    type();
+  }
+
+  const io = new IntersectionObserver((es)=>{
+    es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  },{threshold:.18});
+  document.querySelectorAll('.reveal').forEach(n=>io.observe(n));
+
+  function handleWaitlist(e) {
+    e.preventDefault();
+    const form = e.target;
+    const input = form.querySelector('input[type="email"]');
+    const btn = form.querySelector('button');
+    btn.textContent = '✓ Confirmé !';
+    btn.disabled = true;
+    input.value = '';
+    setTimeout(() => {
+      btn.textContent = 'Rejoindre';
+      btn.disabled = false;
+    }, 3000);
+  }
+
+  document.getElementById('waitlist-form')?.addEventListener('submit', handleWaitlist);
+  document.getElementById('waitlist-form-2')?.addEventListener('submit', handleWaitlist);
+</script>
+</body>
+</html>
